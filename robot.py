@@ -5,6 +5,7 @@ import threading
 
 PORT = 2024
 
+
 # Initialize Pygame
 pygame.init()
 
@@ -38,16 +39,20 @@ class Robot(pygame.sprite.Sprite):
     def update(self, command):
         if command:
             if command == "up":
-                self.rect.y -= 10
+                if (self.rect.y > -250):
+                    self.rect.y -= 10
                 self.direction = "up"
             elif command == "down":
-                self.rect.y += 10
+                if self.rect.y < 250:
+                    self.rect.y += 10
                 self.direction = "down"
             elif command == "left":
-                self.rect.x -= 10
+                if self.rect.x > -360:
+                    self.rect.x -= 10
                 self.direction = "left"
             elif command == "right":
-                self.rect.x += 10
+                if self.rect.x < 360:
+                    self.rect.x += 10
                 self.direction = "right"
 
 
@@ -71,7 +76,7 @@ def receive_commands():
     global current_command
     while running:
         try:
-            data, _ = sock.recvfrom(4096)
+            data, client_address = sock.recvfrom(4096)
             with command_lock:
 
                 res = data.decode("utf-8").strip().lower().split(";")
@@ -81,6 +86,7 @@ def receive_commands():
                     current_command = None
         except BlockingIOError:
             continue
+
 
 
 # Start the thread
