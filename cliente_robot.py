@@ -1,5 +1,6 @@
 import time
 import socket
+import random
 
 # Set up the socket
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -25,21 +26,36 @@ try:
         if acao == 'esquivar':
             
             lado = ['left', 'right'] 
-            for i in range(20):
-                
-                mensagem = f"controle;{lado[0]}"
+            es = random.randint(0, 1)
+            
+            for i in range(2):     
+                for j in range(20):
+                    mensagem = f"controle;{lado[(i - es) ** 2]}"
+                    
+                    sent = sock.sendto(mensagem.encode(), endereco_servidor)            
+                    time.sleep(0.01)
+        
+        if acao == 'pular':
+            lado = input("Escolha o lado (left, right): ")
+            ladoA = [lado, 'up']
+            ladoE = [lado, 'down']
+            for i in range(20):        
+                mensagem = f"controle;{ladoA[i % 2]}"
                 
                 sent = sock.sendto(mensagem.encode(), endereco_servidor)            
-                time.sleep(0.01)
+                time.sleep(0.02)
             
-            for i in range(20):
-                
-                mensagem = f"controle;{lado[1]}"
+            for i in range(5):        
+                mensagem = f"controle;{lado}"
                 
                 sent = sock.sendto(mensagem.encode(), endereco_servidor)            
-                time.sleep(0.01)
+                time.sleep(0.02)
             
-            
+            for i in range(20):        
+                mensagem = f"controle;{ladoE[i % 2]}"
+                
+                sent = sock.sendto(mensagem.encode(), endereco_servidor)            
+                time.sleep(0.02)
         
         mensagem = f"controle;{acao}"
         if mensagem:
