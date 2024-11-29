@@ -76,7 +76,7 @@ def receive_commands():
     global current_command
     while running:
         try:
-            data, client_address = sock.recvfrom(4096)
+            data,_= sock.recvfrom(4096)
             with command_lock:
 
                 res = data.decode("utf-8").strip().lower().split(";")
