@@ -7,6 +7,8 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 sock.bind(("", 2025))
 endereco_servidor = ("127.0.0.1", 2024)
 
+PASSOS = 20
+
 def mandarMensagem(acao, tempo=0.02):
     mensagem = f"controle;{acao}"                
     sent = sock.sendto(mensagem.encode(), endereco_servidor)
@@ -25,7 +27,7 @@ try:
             velocidade = int(input("Escolha quantos passo por segundo: "))
             
             
-            for i in range(20):
+            for i in range(PASSOS):
                 mandarMensagem(lado, tempo=1 / velocidade * 10)
         
         if acao == 'esquivar':
@@ -33,14 +35,14 @@ try:
             es = random.randint(0, 1)
             
             for i in range(2):     
-                for j in range(20): 
+                for j in range(PASSOS): 
                     mandarMensagem(lado[(i - es) ** 2])
                    
         if acao == 'pular':
             lado = input("Escolha o lado (left, right): ")
             pulo = ['up', '', 'down']
             for i in range(3):      
-                for j in range(10):
+                for j in range(PASSOS // 2):
                     if i == 1 and j % 2 == 0:
                         continue
                     mandarMensagem(lado)
